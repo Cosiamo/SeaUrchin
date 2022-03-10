@@ -11,37 +11,21 @@ import (
 	"time"
 
 	domains "github.com/Cosiamo/SeaUrchin/domains"
+	userAgents "github.com/Cosiamo/SeaUrchin/browserEngines"
+	resultModels "github.com/Cosiamo/SeaUrchin/resultModels"
 
 	// help with scrapping from google
 	"github.com/PuerkitoBio/goquery"
 )
-
-// defining the search results
-type SearchResult struct {
-	ResultRank int
-	ResultURL string
-	ResultTitle string
-	ResultDesc string
-}
-
-// list of all the different type of browser engines
-var userAgents = []string {
-	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
-	"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Safari/604.1.38",
-	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Safari/604.1.38",
-}
 
 // this is used so that Google thinks the requests are coming from different browsers
 // need this so that Google doesn't think anything shady is going on
 func randomUserAgent() string {
 	// select a random number
 	rand.Seed(time.Now().Unix())
-	randNum := rand.Int() % len(userAgents)
+	randNum := rand.Int() % len(userAgents.UserAgents)
 	// to access a particular value in a slice there needs to be an index passed into an array
-	return userAgents[randNum]
+	return userAgents.UserAgents[randNum]
 }
 
 // creating search queries for Google
@@ -69,14 +53,14 @@ func buildGoogleUrls(searchTerm, countryCode, languageCode string, pages, count 
 	return toScrape, nil
 }
 
-func googleResultParsing(response *http.Response, rank int)([]SearchResult, error) {
+func googleResultParsing(response *http.Response, rank int)([]resultModels.SearchResult, error) {
 	doc, err := goquery.NewDocumentFromResponse(response)
 
 	if err != nil {
 		return nil, err
 	}
 
-	results := []SearchResult{}
+	results := []resultModels.SearchResult{}
 	sel := doc.Find("div.g")
 	rank ++
 	// iterate over sel and it will have different nodes
@@ -100,7 +84,7 @@ func googleResultParsing(response *http.Response, rank int)([]SearchResult, erro
 
 		// if the link is not empty, not null, and doesn't have a prefix
 		if link != "" && link != "#" && !strings.HasPrefix(link, "/") {
-			result := SearchResult{
+			result := resultModels.SearchResult{
 				rank,
 				link,
 				title,
@@ -129,8 +113,8 @@ func getScrapeClient(proxyString interface{}) *http.Client {
 }
 
 // where the text is posted
-func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString interface{}, pages, count, backoff int)([]SearchResult, error) {
-	results := []SearchResult{}
+func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString interface{}, pages, count, backoff int)([]resultModels.SearchResult, error) {
+	results := []resultModels.SearchResult{}
 	// count the number of results found for a particular query
 	resultCounter := 0
 	// creating search queries for Google
