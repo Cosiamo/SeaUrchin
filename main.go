@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Cosiamo/SeaUrchin/domains"
+	domains "github.com/Cosiamo/SeaUrchin/domains"
 
 	// help with scrapping from google
 	"github.com/PuerkitoBio/goquery"
@@ -55,7 +55,7 @@ func buildGoogleUrls(searchTerm, countryCode, languageCode string, pages, count 
 
 	// find the realvent Google domain (URL) for the country code
 	// helps find the index for the countryCode
-	if googleBase, found := GoogleDomains[countryCode]; found {
+	if googleBase, found := domains.GoogleDomains[countryCode]; found {
 		for i := 0; i < pages; i++ {
 			start := i * count
 			// "%s%s&num=... is the type of query Google is expecting
