@@ -15,15 +15,19 @@ func main() {
 	// sets user input
     input := make([]string, 0)
 
+	// reading user input as a set of lines
     scanner := bufio.NewScanner(os.Stdin)
 
     fmt.Print("What do you want to search? : ")
 
+	// advancing NewScanner to generate a token
     scanner.Scan()
+	// returns the token as a newly allocated string
     text := scanner.Text()
+	// appending text, string, to input, string slice
 	input = append(input, text)
 
-	// converts the string slices to a single string and concats them with a space
+	// converts the string slice to a single string and concats them with a space
 	refinedInput := strings.Join(input, " ")
 
 	// Google
@@ -34,5 +38,6 @@ func main() {
 	BingCmd := flag.NewFlagSet("b", flag.ExitOnError)
 	cmd.BingCommand(refinedInput, BingCmd)
 
+	// switches between Google or Bing depending on which subcommand the user inputs
 	cmd.SwitchAndCase(GoogleCmd, BingCmd)
 }
