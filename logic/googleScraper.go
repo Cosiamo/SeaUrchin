@@ -3,17 +3,17 @@ package logic
 import (
 	"fmt"
 
-	// for http requests
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
-	userAgents "github.com/Cosiamo/SeaUrchin/browserEngines"
+	// internal packages
+	client "github.com/Cosiamo/SeaUrchin/client"
 	domains "github.com/Cosiamo/SeaUrchin/domains"
 	resultModels "github.com/Cosiamo/SeaUrchin/resultModels"
+	userAgents "github.com/Cosiamo/SeaUrchin/userAgents"
 
-	// help with scrapping from google
+	// external packages
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -87,20 +87,6 @@ func googleResultParsing(response *http.Response, rank int)([]resultModels.Searc
 	return results, err
 }
 
-func getScrapeClient(proxyString interface{}) *http.Client {
-
-	switch v := proxyString.(type){
-
-	// if a string is passed in the proxy
-	case string:
-		proxyUrl, _ := url.Parse(v)
-		return &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
-	// if a string is NOT passed in the proxy
-	default:
-		return &http.Client{}
-	}
-}
-
 // where the text is posted
 func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString interface{}, pages, count, backoff int)([]resultModels.SearchResult, error) {
 	results := []resultModels.SearchResult{}
@@ -138,7 +124,7 @@ func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString inte
 func scrapeClientRequest(searchURL string, proxyString interface{})(*http.Response, error) {
 	// if there's something in the proxy string it will create a baseClient 
 	// else it will return a default baseClient
-	baseClient := getScrapeClient(proxyString)
+	baseClient := client.GetScrapeClient(proxyString)
 	// a GET request to the searchURL from buildGoogleUrls function
 	req, _ := http.NewRequest("GET", searchURL, nil)
 	req.Header.Set("User-Agent", userAgents.RandomUserAgent())
