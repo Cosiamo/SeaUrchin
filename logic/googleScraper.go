@@ -11,7 +11,6 @@ import (
 	client "github.com/Cosiamo/SeaUrchin/client"
 	domains "github.com/Cosiamo/SeaUrchin/domains"
 	resultModels "github.com/Cosiamo/SeaUrchin/resultModels"
-	userAgents "github.com/Cosiamo/SeaUrchin/userAgents"
 
 	// external packages
 	"github.com/PuerkitoBio/goquery"
@@ -98,10 +97,10 @@ func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString inte
 		return nil, err
 	}
 
-	// scrape, with scrapeClientRequest, through googlePages query one by one 
+	// scrape, with ScrapeClientRequest, through googlePages query one by one 
 	for _, page := range googlePages {
-		// scrapeClientRequest will make the request to the query googlePages
-		res, err := scrapeClientRequest(page, proxyString)
+		// ScrapeClientRequest will make the request to the query googlePages
+		res, err := client.ScrapeClientRequest(page, proxyString)
 		if err != nil {
 			return nil, err
 		}
@@ -118,29 +117,4 @@ func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString inte
 		time.Sleep(time.Duration(backoff) * time.Second)
 	}
 	return results, nil
-}
-
-// only receiving one page from for loop
-func scrapeClientRequest(searchURL string, proxyString interface{})(*http.Response, error) {
-	// if there's something in the proxy string it will create a baseClient 
-	// else it will return a default baseClient
-	baseClient := client.GetScrapeClient(proxyString)
-	// a GET request to the searchURL from buildGoogleUrls function
-	req, _ := http.NewRequest("GET", searchURL, nil)
-	req.Header.Set("User-Agent", userAgents.RandomUserAgent())
-
-	res, err := baseClient.Do(req)
-	if res.StatusCode != 200 {
-		err := fmt.Errorf("scraper received a non-200 status code suggesting a ban")
-		// if the status code is not 200, returning nil for res and err for err
-		return nil, err
-	}
-
-	if err != nil {
-		// if there's an error, returning nil for res and err for error
-		return nil, err
-	}
-	
-	// returning res to http.Response and nil to error
-	return res, nil
 }
