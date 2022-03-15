@@ -3,30 +3,19 @@ package logic
 import (
 	"fmt"
 
-	"math/rand"
 	// for http requests
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
-	domains "github.com/Cosiamo/SeaUrchin/domains"
 	userAgents "github.com/Cosiamo/SeaUrchin/browserEngines"
+	domains "github.com/Cosiamo/SeaUrchin/domains"
 	resultModels "github.com/Cosiamo/SeaUrchin/resultModels"
 
 	// help with scrapping from google
 	"github.com/PuerkitoBio/goquery"
 )
-
-// this is used so that Google thinks the requests are coming from different browsers
-// need this so that Google doesn't think anything shady is going on
-func randomUserAgent() string {
-	// select a random number
-	rand.Seed(time.Now().Unix())
-	randNum := rand.Int() % len(userAgents.UserAgents)
-	// to access a particular value in a slice there needs to be an index passed into an array
-	return userAgents.UserAgents[randNum]
-}
 
 // creating search queries for Google
 func buildGoogleUrls(searchTerm, countryCode, languageCode string, pages, count int)([]string, error) {
@@ -152,7 +141,7 @@ func scrapeClientRequest(searchURL string, proxyString interface{})(*http.Respon
 	baseClient := getScrapeClient(proxyString)
 	// a GET request to the searchURL from buildGoogleUrls function
 	req, _ := http.NewRequest("GET", searchURL, nil)
-	req.Header.Set("User-Agent", randomUserAgent())
+	req.Header.Set("User-Agent", userAgents.RandomUserAgent())
 
 	res, err := baseClient.Do(req)
 	if res.StatusCode != 200 {
