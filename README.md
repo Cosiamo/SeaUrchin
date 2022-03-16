@@ -12,3 +12,6 @@
 - Allow users to change settings
     - change domain, language, number of requests, and proxy
     - use a flag such as `-s` or `-settings`
+- Fix Google's description
+    - might have to change the `descTag` and `titleTag` in the parse package
+- Improve the format of the results that are being returned
