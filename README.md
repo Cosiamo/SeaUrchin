@@ -16,3 +16,4 @@
     - might have to change the `descTag` and `titleTag` in the parse package
 - Improve the format of the results that are being returned
 - Allow for a default search engine
+- Optional: add colors to the strings to differentiate different things
