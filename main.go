@@ -9,7 +9,6 @@ import (
 func main() {
 	// Google
 	GoogleCmd := flag.NewFlagSet("g", flag.ExitOnError)
-
 	// Bing
 	BingCmd := flag.NewFlagSet("b", flag.ExitOnError)
 

@@ -31,9 +31,13 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet) {
 			// BingScrape(searchTerm, country, proxyString, pages, count, backoff)
 			res, err := logic.BingScrape(searchTerm, "com", nil, 1, 30, 10)
 			logic.Output(res, err)
-		// default case
+		// if user inputs invalid subcommand
 		default:
-			fmt.Println("Expected 'g' or 'b' subcommand")
+			fmt.Println("To search, use the subcommands:")
+			fmt.Println("    'g' for Google")
+			fmt.Println("    'b' for Bing")
+			// use this for when settings are implemted for their various flags
+			flag.PrintDefaults()
 			os.Exit(1)
 		}
 }
