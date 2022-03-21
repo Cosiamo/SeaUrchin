@@ -8,25 +8,26 @@ import (
 	build "github.com/Cosiamo/SeaUrchin/build"
 )
 
-func DisplayBackoff(backoff int) {
+func DisplayGoogleInfo(searchTerm string, domain string, backoff int) {
 	text := "Backoff time was " + strconv.Itoa(backoff) + " seconds"
 	fmt.Println(text)
-}
 
-func DisplayGoogleUrl(searchTerm string) {
-	url, err := build.BuildGoogleUrls(searchTerm, "com", "en", 1, 30)
+	url, err := build.BuildGoogleUrls(searchTerm, domain, "en", 1, 30)
 	if err != nil {
 		return
 	}
-	text := strings.Join(url, "")
-	fmt.Println(text)
+	link := strings.Join(url, "")
+	fmt.Println(link)
 }
 
-func DisplayBingUrl(searchTerm string) {
-	url, err := build.BuildBingUrls(searchTerm, "com", 1, 30)
+func DisplayBingInfo(searchTerm string, domain string, backoff int) {
+	text := "Backoff time was " + strconv.Itoa(backoff) + " seconds"
+	fmt.Println(text)
+
+	url, err := build.BuildBingUrls(searchTerm, domain, 1, 30)
 	if err != nil {
 		return
 	}
-	text := strings.Join(url, "")
-	fmt.Println(text)
+	link := strings.Join(url, "")
+	fmt.Println(link)
 }

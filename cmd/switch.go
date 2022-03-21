@@ -10,6 +10,7 @@ import (
 
 var searchTerm string
 var backoff int
+var domain string
 
 // Switch between Google or Bing depending on subcommand
 func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, SettingsCmd *flag.FlagSet) {
@@ -20,19 +21,17 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, SettingsCmd *
 			searchTerm = logic.Input()
 			backoff = logic.Backoff()
 
-			showBackoff := GoogleCmd.Bool("backoff", false, "Displays the backoff time")
-			showUrl := GoogleCmd.Bool("url", false, "Displays the URL that the results are from")
+			changeDomain := GoogleCmd.String("url", "com", "Choose which Google domain you want to use")
+			showInfo := GoogleCmd.Bool("info", false, "Displays the backoff time and the URL that the results were searched from")
 			GoogleCmd.Parse(os.Args[2:])
 
+			domain = *changeDomain
 			// GoogleScrape(searchTerm, countryCode, languageCode, proxyString, pages, count, backoff)
-			res, err := logic.GoogleScrape(searchTerm, "com", "en", nil, 1, 30, backoff)
+			res, err := logic.GoogleScrape(searchTerm, domain, "en", nil, 1, 30, backoff)
 			logic.Output(res, err)
 
-			if *showBackoff {
-				DisplayBackoff(backoff)
-			}
-			if *showUrl {
-				DisplayGoogleUrl(searchTerm)
+			if *showInfo {
+				DisplayGoogleInfo(searchTerm, domain, backoff)
 			}
 		// Bing case
 		case "b":
@@ -40,19 +39,17 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, SettingsCmd *
 			searchTerm = logic.Input()
 			backoff = logic.Backoff()
 
-			showBackoff := BingCmd.Bool("backoff", false, "Displays the backoff time")
-			showUrl := BingCmd.Bool("url", false, "Displays the URL that the results are from")
+			changeDomain := BingCmd.String("url", "com", "Choose which Bing domain you want to use")
+			showInfo := BingCmd.Bool("info", false, "Displays the backoff time and the URL that the results were searched from")
 			BingCmd.Parse(os.Args[2:])
 
+			domain = *changeDomain
 			// BingScrape(searchTerm, country, proxyString, pages, count, backoff)
-			res, err := logic.BingScrape(searchTerm, "com", nil, 1, 30, backoff)
+			res, err := logic.BingScrape(searchTerm, domain, nil, 1, 30, backoff)
 			logic.Output(res, err)
 
-			if *showBackoff {
-				DisplayBackoff(backoff)
-			}
-			if *showUrl {
-				DisplayBingUrl(searchTerm)
+			if *showInfo {
+				DisplayBingInfo(searchTerm, domain, backoff)
 			}
 		case "settings":
 			// googleDomainSet := SettingsCmd.String("gdomain", "com", "Change the Google domain to your region")
