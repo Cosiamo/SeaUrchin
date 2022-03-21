@@ -6,9 +6,9 @@
 - If you run main.go without the `g` or `b` subcommand it will exit with error
     - this is intentional for right now
     - I plan on allowing users to set default search engines so you don't have to type in a flag every time
-- You can view what the URL that the results were fetched from by using the `-url` flag
-- If you want to see how long the backoff time is, use the `-backoff` flag
-    - example: `go run main.go g -url` then once you search what you're looking for the link will be displayed at the end
+- If you want to view what the URL that the results were fetched from and how long the backoff time is, use the `-info` flag
+- To change which domain (country or region) you want to search in, use the `-url` flag
+    - example: `go run main.go g -url uk` will search on google.co.uk 
 
 # TODO
 - Run program with `sea` keyword
