@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	domains "github.com/Cosiamo/SeaUrchin/domains"
+	client "github.com/Cosiamo/SeaUrchin/client"
 	logic "github.com/Cosiamo/SeaUrchin/logic"
 )
 
-var searchTerm string
+var searchTerm, domain string
 var backoff int
-var domain string
 
 // Switch between Google or Bing depending on subcommand
 func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, SettingsCmd *flag.FlagSet, DomainsCmd *flag.FlagSet) {
@@ -22,13 +21,15 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, SettingsCmd *
 			searchTerm = logic.Input()
 			backoff = logic.Backoff()
 
+			proxy := GoogleCmd.String("proxy", "", "Add a proxy string to your search")
 			changeDomain := GoogleCmd.String("url", "com", "Choose which Google domain you want to use")
 			showInfo := GoogleCmd.Bool("info", false, "Displays the backoff time and the URL that the results were searched from")
 			GoogleCmd.Parse(os.Args[2:])
 
+			proxyString := client.ConnectProxy(proxy)
 			domain = *changeDomain
 			// GoogleScrape(searchTerm, countryCode, languageCode, proxyString, pages, count, backoff)
-			res, err := logic.GoogleScrape(searchTerm, domain, "en", nil, 1, 30, backoff)
+			res, err := logic.GoogleScrape(searchTerm, domain, "en", proxyString, 1, 30, backoff)
 			logic.Output(res, err)
 
 			if *showInfo {
@@ -40,13 +41,15 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, SettingsCmd *
 			searchTerm = logic.Input()
 			backoff = logic.Backoff()
 
+			proxy := BingCmd.String("proxy", "", "Add a proxy string to your search")
 			changeDomain := BingCmd.String("url", "com", "Choose which Bing domain you want to use")
 			showInfo := BingCmd.Bool("info", false, "Displays the backoff time and the URL that the results were searched from")
 			BingCmd.Parse(os.Args[2:])
 
+			proxyString := client.ConnectProxy(proxy)
 			domain = *changeDomain
 			// BingScrape(searchTerm, country, proxyString, pages, count, backoff)
-			res, err := logic.BingScrape(searchTerm, domain, nil, 1, 30, backoff)
+			res, err := logic.BingScrape(searchTerm, domain, proxyString, 1, 30, backoff)
 			logic.Output(res, err)
 
 			if *showInfo {
@@ -62,21 +65,22 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, SettingsCmd *
 				return
 			}
 			if *showGoogleDomains {
-				domains.GoogleDomainList()
+				GoogleDomainList()
 				return
 			}
 			if *showBingDomains {
-				domains.BingDomainList()
+				BingDomainList()
 				return
 			}
 		case "settings":
-			// googleDomainSet := SettingsCmd.String("gdomain", "com", "Change the Google domain to your region")
-			// //bindDomainSet := SettingsCmd.String("bdomain", "com", "Change the Bing domain to your region")
+			// googleDomainSet := SettingsCmd.String("gdomain", "", "Change the Google domain to your region")
+			// bindDomainSet := SettingsCmd.String("bdomain", "com", "Change the Bing domain to your region")
 			// SettingsCmd.Parse(os.Args[2:])
 
-			// if len(gdomain) == 3 {
-
-			// } 
+			// if len(*googleDomainSet) > 0 {
+			// 	domainSet = *googleDomainSet
+			// }
+			
 
 		// if user inputs invalid subcommand
 		default:
