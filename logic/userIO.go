@@ -37,5 +37,6 @@ func Output(res []resultModels.SearchResult, err error) {
 	} else {
 		// need to swap 'Println' for 'log' eventually
 		fmt.Println(err)
+		fmt.Println("Type [command name] domains -g or -b to view supported regions")
 	}
 }
