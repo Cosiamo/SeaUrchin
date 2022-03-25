@@ -31,7 +31,7 @@ func GoogleResultParsing(response *http.Response, rank int) ([]resultModels.Sear
 		// find the title tag
 		titleTag := item.Find("h3.r")
 		// find the description tag
-		descTag := item.Find("span.st")
+		descTag := item.Find("div.VwiC3b")
 		// get the description from the description tag - convert to text
 		desc := descTag.Text()
 		// get the title from the title tag - convert to text
