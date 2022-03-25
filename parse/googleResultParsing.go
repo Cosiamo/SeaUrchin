@@ -29,7 +29,7 @@ func GoogleResultParsing(response *http.Response, rank int) ([]resultModels.Sear
 		// the link is in the link tag
 		link, _ := linkTag.Attr("href")
 		// find the title tag
-		titleTag := item.Find("h3.r")
+		titleTag := item.Find("h3")
 		// find the description tag
 		descTag := item.Find("div.VwiC3b")
 		// get the description from the description tag - convert to text
