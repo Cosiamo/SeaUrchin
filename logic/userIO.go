@@ -29,11 +29,15 @@ func Input() string {
 	return refinedInput
 }
 
-func Output(res []resultModels.SearchResult, err error) {
+func Output(res []resultModels.SearchResult, err error, rank bool) {
 	// if no error, range over res var and print a response
 	if err == nil {
 		for _, res := range res {
-			fmt.Fprintln(color.Output, res.ResultRank, ":", color.YellowString(res.ResultTitle))
+			if rank {
+				fmt.Fprintln(color.Output, res.ResultRank, ":", color.YellowString(res.ResultTitle))
+			} else {
+				fmt.Fprintln(color.Output, color.YellowString(res.ResultTitle))
+			}
 			fmt.Fprintln(color.Output, color.BlueString(res.ResultURL))
 			fmt.Println(res.ResultDesc)
 			fmt.Println(" ")

@@ -22,6 +22,7 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 			changeDomain := GoogleCmd.String("url", "com", "Choose which Google domain you want to use ('domains' subcommand lists supported domains)")
 			showInfo := GoogleCmd.Bool("info", false, "Displays the backoff time and the URL that the results were searched from")
 			help := GoogleCmd.Bool("help", false, "Lists flag options")
+			rankCmd := GoogleCmd.Bool("rank", false, "Displays the rank of the results next to the title")
 			GoogleCmd.Parse(os.Args[2:])
 
 			if *help {
@@ -36,8 +37,9 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 			proxyString := client.ConnectProxy(proxy)
 			domain = *changeDomain
 			// GoogleScrape(searchTerm, countryCode, languageCode, proxyString, pages, count, backoff)
-			res, err := logic.GoogleScrape(searchTerm, domain, "en", proxyString, 1, 30, backoff)
-			logic.Output(res, err)
+			res, err := logic.GoogleScrape(searchTerm, domain, "en", proxyString, 1, 20, backoff)
+
+			logic.Output(res, err, *rankCmd)
 
 			if *showInfo {
 				fmt.Fprintln(color.Output, color.GreenString("-----------info-----------"))
@@ -49,6 +51,7 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 			changeDomain := BingCmd.String("url", "com", "Choose which Bing domain you want to use ('domains' subcommand lists supported domains)")
 			showInfo := BingCmd.Bool("info", false, "Displays the backoff time and the URL that the results were searched from")
 			help := BingCmd.Bool("help", false, "Lists flag options")
+			rankCmd := BingCmd.Bool("rank", false, "Displays the rank of the results next to the title")
 			BingCmd.Parse(os.Args[2:])
 
 			if *help {
@@ -63,13 +66,15 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 			proxyString := client.ConnectProxy(proxy)
 			domain = *changeDomain
 			// BingScrape(searchTerm, country, proxyString, pages, count, backoff)
-			res, err := logic.BingScrape(searchTerm, domain, proxyString, 1, 30, backoff)
-			logic.Output(res, err)
+			res, err := logic.BingScrape(searchTerm, domain, proxyString, 1, 20, backoff)
+
+			logic.Output(res, err, *rankCmd)
 
 			if *showInfo {
 				fmt.Fprintln(color.Output, color.GreenString("-----------info-----------"))
 				DisplayBingInfo(searchTerm, domain, backoff)
 			}
+		// domains case
 		case "domains":
 			showGoogleDomains := DomainsCmd.Bool("g", false, "Displays all available Google domains")
 			showBingDomains := DomainsCmd.Bool("b", false, "Displays all available Bing domains")
