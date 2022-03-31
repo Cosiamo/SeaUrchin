@@ -15,7 +15,7 @@ func DisplayGoogleInfo(searchTerm string, domain string, backoff int) {
 	text := "Backoff time was " + strconv.Itoa(backoff) + " seconds"
 	fmt.Println(text)
 
-	url, err := build.BuildGoogleUrls(searchTerm, domain, "en", 1, 30)
+	url, err := build.BuildGoogleUrls(searchTerm, domain, "en", 1, 20)
 	if err != nil {
 		return
 	}
@@ -27,7 +27,7 @@ func DisplayBingInfo(searchTerm string, domain string, backoff int) {
 	text := "Backoff time was " + strconv.Itoa(backoff) + " seconds"
 	fmt.Println(text)
 
-	url, err := build.BuildBingUrls(searchTerm, domain, 1, 30)
+	url, err := build.BuildBingUrls(searchTerm, domain, 1, 20)
 	if err != nil {
 		return
 	}
