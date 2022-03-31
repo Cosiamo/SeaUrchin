@@ -7,6 +7,7 @@ import (
 
 	client "github.com/Cosiamo/SeaUrchin/client"
 	logic "github.com/Cosiamo/SeaUrchin/logic"
+	color "github.com/fatih/color"
 )
 
 var searchTerm, domain string
@@ -27,8 +28,8 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 				GoogleCmd.PrintDefaults()
 				return
 			}
-			
-			fmt.Print("Search on Google: ")
+
+			fmt.Fprint(color.Output, "Search on ", color.BlueString("G"), color.RedString("o"), color.YellowString("o"), color.BlueString("g"), color.GreenString("l"), color.RedString("e"), ": ")
 			searchTerm = logic.Input()
 			backoff = logic.Backoff()
 
@@ -39,6 +40,7 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 			logic.Output(res, err)
 
 			if *showInfo {
+				fmt.Fprintln(color.Output, color.GreenString("-----------info-----------"))
 				DisplayGoogleInfo(searchTerm, domain, backoff)
 			}
 		// Bing case
@@ -54,7 +56,7 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 				return
 			}
 
-			fmt.Print("Search on Bing: ")
+			fmt.Fprint(color.Output, "Search on ", color.BlueString("B"), color.YellowString("i"), color.BlueString("ng"), ": ")
 			searchTerm = logic.Input()
 			backoff = logic.Backoff()
 
@@ -65,6 +67,7 @@ func SwitchAndCase(GoogleCmd *flag.FlagSet, BingCmd *flag.FlagSet, DomainsCmd *f
 			logic.Output(res, err)
 
 			if *showInfo {
+				fmt.Fprintln(color.Output, color.GreenString("-----------info-----------"))
 				DisplayBingInfo(searchTerm, domain, backoff)
 			}
 		case "domains":
