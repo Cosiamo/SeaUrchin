@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	resultModels "github.com/Cosiamo/SeaUrchin/resultModels"
+	color "github.com/fatih/color"
 )
 
 func Input() string {
@@ -32,7 +33,10 @@ func Output(res []resultModels.SearchResult, err error) {
 	// if no error, range over res var and print a response
 	if err == nil {
 		for _, res := range res {
-			fmt.Println(res)
+			fmt.Fprintln(color.Output, res.ResultRank, ":", color.YellowString(res.ResultTitle))
+			fmt.Fprintln(color.Output, color.BlueString(res.ResultURL))
+			fmt.Println(res.ResultDesc)
+			fmt.Println(" ")
 		}
 	} else {
 		// need to swap 'Println' for 'log' eventually
