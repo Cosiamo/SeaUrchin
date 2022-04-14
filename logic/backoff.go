@@ -9,18 +9,14 @@ var res int
 
 func Backoff()int {
     rand.Seed(time.Now().UnixNano())
-    for i := 1; i <= 12; i++ {
-		i = rand.Intn(10)
+    for i := 1; i <= 6; i++ {
+		i = rand.Intn(5)
 		if i <= 2 {
-			// 4, 5, 6
-			res = i + 4
-			return res
-		} else if i > 2 && i <= 6 {
-			// 5, 6, 7, 8
-			res = i + 2
+			// 1, 2, 3
+			res = i + 1
 			return res
 		} else {
-			// 7, 8, 9
+			// 3, 4, 5
 			res = i
 			return res
 		}
