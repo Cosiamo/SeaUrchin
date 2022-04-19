@@ -6,9 +6,11 @@ SeaUrchin is an Open-Source application that lets you search either Google or Bi
 Because it sounds like 'searchin' lol.
 
 # How to Install
-On Windows click the "code" dropdown menu, then click "download ZIP". Once that's done extract the `.exe` file
+On Windows click the "code" dropdown menu, then click "download ZIP". Once that's done extract the `sea.exe` file
 
-Will have Linux and MacOS downloads available for next commit. For now, if you have Golang installed, run:
+For Linux, do the same process as Windows except extract the `sea` file.
+
+I don't have a Mac so I'm not able to test if it will work on MacOS or not. If you have Go installed on your Mac you can still get use this application, just run the commands:
 ```
 git clone https://github.com/Cosiamo/SeaUrchin.git && cd SeaUrchin
 go build
