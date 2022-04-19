@@ -13,7 +13,7 @@ For Linux, do the same process as Windows except extract the `sea` file.
 I don't have a Mac so I'm not able to test if it will work on MacOS or not. If you have Go installed on your Mac you can still build this application, just run the commands:
 ```
 git clone https://github.com/Cosiamo/SeaUrchin.git && cd SeaUrchin
-go build
+go build -o sea
 ```
 I know Go allows you to cross compile applications, however I don't want to have a file in my repo that I haven't tested myself.
 
